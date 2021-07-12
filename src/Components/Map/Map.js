@@ -9,10 +9,9 @@ import setupWidgets from './Widgets';
 import addLayers from './layers';
 import Point from '@arcgis/core/geometry/Point';
 import { geodesicBuffer } from 'esri/geometry/geometryEngine';
-
-// import * as geometryEngineAsync from '@arcgis/core/geometry/geometryEngineAsync';
 import { addProxyRule } from 'esri/core/urlUtils';
-import { whenFalseOnce } from 'esri/core/watchUtils';
+import Extent from 'esri/geometry/Extent';
+// import { whenFalseOnce } from 'esri/core/watchUtils';
 
 import './Map.css';
 
@@ -20,16 +19,7 @@ let map;
 let view;
 let layerView;
 
-function MainMap({
-  setFormShown,
-  setCurrentFeature,
-  setMapLoaded,
-  setLegendTocFilter,
-  getCurrentOtherFilter,
-  setOtherFilter,
-  lat,
-  lng,
-}) {
+function MainMap({ lat, lng }) {
   const mapDiv = useRef(null);
   addProxyRule({
     urlPrefix: 'geo.azmag.gov',
@@ -68,14 +58,49 @@ function MainMap({
           snapToZoom: true,
         },
         popup: {
+          alignment: 'top-center',
           dockEnabled: true,
           collapseEnabled: false,
           dockOptions: {
+            position: 'top-center',
             buttonEnabled: false,
             breakpoint: false,
           },
         },
         ui: { components: [] },
+      });
+
+      var maxExtent = new Extent({
+        spatialReference: {
+          wkid: 102100,
+        },
+        xmax: -12399883.303088231,
+        xmin: -12546642.690914528,
+        ymax: 3993315.240863136,
+        ymin: 3925821.209899271,
+      });
+
+      view.watch('extent', function (extent) {
+        var currentCenter = extent.center;
+        if (!maxExtent.contains(currentCenter)) {
+          var newCenter = extent.center;
+          if (currentCenter.x < maxExtent.xmin) {
+            newCenter.x = maxExtent.xmin;
+          }
+          if (currentCenter.x > maxExtent.xmax) {
+            newCenter.x = maxExtent.xmax;
+          }
+          if (currentCenter.y < maxExtent.ymin) {
+            newCenter.y = maxExtent.ymin;
+          }
+          if (currentCenter.y > maxExtent.ymax) {
+            newCenter.y = maxExtent.ymax;
+          }
+
+          var newExtent = view.extent.clone();
+          newExtent.centerAt(newCenter);
+          view.extent = newExtent;
+        }
       });
 
       addLayers(map, view).then(() => {
@@ -121,35 +146,16 @@ function MainMap({
         setupWidgets({
           map,
           view,
-          setLegendTocFilter,
-          setFormShown,
-          setCurrentFeature,
-          getCurrentOtherFilter,
-          setOtherFilter,
           lat,
           lng,
         });
       });
 
-      function feedbackClicked(e) {
-        setCurrentFeature(() => {
-          return e;
-        });
-        setFormShown(true);
-      }
-
-      view.popup.on('trigger-action', function (event) {
-        if (event.action.id === 'feedback') {
-          console.log(view.popup);
-          feedbackClicked(view.popup.selectedFeature);
-        }
-      });
-
-      whenFalseOnce(view, 'updating', () => {
-        // setMapLoaded(true);
-      });
+      // whenFalseOnce(view, 'updating', () => {
+      //   // setMapLoaded(true);
+      // });
     }
-  }, []);
+  }, [lat, lng]);
 
   return <div className="mapDiv" ref={mapDiv}></div>;
 }

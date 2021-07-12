@@ -16,8 +16,13 @@ function heatReliefPopup() {
       return graphic.layer.title;
     },
     content: ({ graphic }) => {
-      const { PopupAddress, PopupHours, PopupOrganization, Pets } =
-        graphic.attributes;
+      const {
+        PopupAddress,
+        PopupHours,
+        PopupOrganization,
+        Pets,
+        PrimaryPhone,
+      } = graphic.attributes;
       const popupDiv = document.createElement('div');
       ReactDOM.render(
         <>
@@ -25,6 +30,8 @@ function heatReliefPopup() {
           <b>Organization</b>: {PopupOrganization} <br />
           <b>Address</b>: {PopupAddress} <br />
           <b>Hours</b>: {PopupHours} <br />
+          <b>Phone</b>: {<a href={`tel:${PrimaryPhone}`}>{PrimaryPhone}</a>}{' '}
+          <br />
           {Pets ? petsAllowed(Pets) : ''}
           <MapButtons item={graphic.attributes} />
         </>,
@@ -50,7 +57,7 @@ const layers = [
     url: 'https://geo.azmag.gov/arcgis/rest/services/maps/Hydration/MapServer/3',
     includeInLayersList: true,
     visible: true,
-    title: 'Collection/Donation Site',
+    title: 'Donation Site',
     legend: true,
     popupTemplate: heatReliefPopup(),
   },

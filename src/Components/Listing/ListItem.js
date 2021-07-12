@@ -10,7 +10,6 @@ import MapButtons from '../MapButtons';
 const listItemPStyle = { fontSize: '11px', marginBottom: '3px' };
 
 export default function ListItem({ item }) {
-  console.log(item);
   return (
     <ListGroup.Item
       className="mb-1"

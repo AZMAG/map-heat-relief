@@ -37,6 +37,7 @@ export default function CustomMap() {
           variant="secondary"
           size="sm"
           style={{
+            width: '40px',
             margin: 'auto',
             position: 'absolute',
             bottom: 5,

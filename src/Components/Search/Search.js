@@ -54,7 +54,7 @@ export default function Search() {
 
   return (
     <>
-      <Jumbotron className="mt-5">
+      <Jumbotron style={{ marginBottom: '10px' }} className="mt-2">
         <label style={{ fontWeight: '600' }}>
           To get started, search for and by address or zip code
         </label>

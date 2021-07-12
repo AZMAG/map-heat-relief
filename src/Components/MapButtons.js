@@ -1,13 +1,13 @@
 import React from 'react';
 import { Button } from 'react-bootstrap';
 import GoogleMapsIcon from '../images/Google-Maps-Icon.svg';
-import AppleMapsIcon from '../images/Apple-Maps-Icon.svg';
+// import AppleMapsIcon from '../images/Apple-Maps-Icon.svg';
 
 export default function MapButtons({ item }) {
-  function openInAppleMaps(item) {
-    const url = `http://maps.apple.com/?daddr=${item.PopupAddress}&dirflg=d`;
-    window.open(url);
-  }
+  // function openInAppleMaps(item) {
+  //   const url = `http://maps.apple.com/?daddr=${item.PopupAddress}&dirflg=d`;
+  //   window.open(url);
+  // }
 
   function openInGoogleMaps(item) {
     const url = `https://www.google.com/maps/dir/?api=1&destination=${item.PopupAddress}`;

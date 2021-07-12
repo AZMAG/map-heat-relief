@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
-import HeatReliefLogo from '../../images/Heat-Relief-Logo.png';
+// import HeatReliefLogo from '../../images/Heat-Relief-Logo.png';
 import AboutModal from '../../Modals/AboutModal';
 
 const headerStyle = {
@@ -31,7 +31,7 @@ export default function Header() {
       <Button variant="secondary" size="sm" onClick={() => history.push('/')}>
         <i className="fa fa-home"></i>
       </Button>
-      <img height="40" src={HeatReliefLogo} alt="HRN Logo" />
+      {/* <img height="40" src={HeatReliefLogo} alt="HRN Logo" /> */}
       <h3 style={{ fontSize: '18px', marginBottom: '0' }}>
         2021 Heat Relief Network
       </h3>

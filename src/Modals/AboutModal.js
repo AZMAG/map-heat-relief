@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, Button } from 'react-bootstrap';
+import { Modal } from 'react-bootstrap';
 import hydrationLogo from '../images/hydration.png';
 import coolingLogo from '../images/cooling.png';
 import donationLogo from '../images/donation.png';
@@ -73,11 +73,11 @@ export default function AboutModal({ aboutModalShown, setAboutModalShown }) {
           <img height="70" src={magLogo} alt="MAG Logo" />
         </div>
       </Modal.Body>
-      <Modal.Footer style={{ justifyContent: 'center' }}>
+      {/* <Modal.Footer style={{ justifyContent: 'center' }}>
         <Button variant="secondary" onClick={handleClose}>
           Close
         </Button>
-      </Modal.Footer>
+      </Modal.Footer> */}
     </Modal>
   );
 }

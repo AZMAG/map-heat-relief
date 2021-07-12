@@ -8,17 +8,12 @@ import AboutModal from '../Modals/AboutModal';
 
 const headerStyle = {
   color: 'white',
-  fontSize: '28px',
-  padding: '5%',
+  fontSize: '17px',
+  flex: 1,
   textAlign: 'center',
   fontFamily: 'ariana-pro, sans-serif',
 };
-const logoContainerStyle = {
-  textAlign: 'center',
-  bottom: '1%',
-  position: 'absolute',
-  width: '100vw',
-};
+
 const orStyle = {
   width: '60px',
   textAlign: 'center',
@@ -49,27 +44,35 @@ export default function Welcome() {
         aboutModalShown={aboutModalShown}
         setAboutModalShown={setAboutModalShown}
       />
-      <h3 style={headerStyle}>2021 Heat Relief Network</h3>
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          padding: '15px 15px 10px 15px',
+        }}
+      >
+        <img height="75" src={HeatReliefLogo} alt="Heat Relief Network Logo" />
+        <h3 style={headerStyle}>2021 Heat Relief Network</h3>
+      </div>
       <div className="ml-2 mr-2">
         <Search />
         <div style={orStyle}>Or</div>
-        <Jumbotron className="mt-4" style={{ textAlign: 'center' }}>
+        <Jumbotron className="mt-2" style={{ textAlign: 'center' }}>
           <Button onClick={exploreClicked} size="lg">
             <i className="mr-3 fas fa-map-marker-alt"></i>Explore the map
           </Button>
         </Jumbotron>
       </div>
-      <div style={logoContainerStyle}>
-        <img src={HeatReliefLogo} alt="Heat Relief Network Logo" />
+      <div style={{ width: '100%', textAlign: 'center' }}>
+        <Button
+          // style={{ position: 'absolute', bottom: 5 }}
+          variant="secondary"
+          onClick={infoClicked}
+          size="lg"
+        >
+          <i className="fas fa-info-circle"></i>
+        </Button>
       </div>
-      <Button
-        style={{ position: 'absolute', bottom: 5, right: 5 }}
-        variant="secondary"
-        onClick={infoClicked}
-        size="sm"
-      >
-        <i className="fas fa-info-circle"></i>
-      </Button>
     </div>
   );
 }
