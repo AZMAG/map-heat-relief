@@ -4,8 +4,13 @@ import ArcGISMap from 'esri/Map';
 import MapView from 'esri/views/MapView';
 import VectorTileLayer from 'esri/layers/VectorTileLayer';
 import Basemap from 'esri/Basemap';
+import Graphic from 'esri/Graphic';
 import setupWidgets from './Widgets';
 import addLayers from './layers';
+import Point from '@arcgis/core/geometry/Point';
+import { geodesicBuffer } from 'esri/geometry/geometryEngine';
+
+// import * as geometryEngineAsync from '@arcgis/core/geometry/geometryEngineAsync';
 import { addProxyRule } from 'esri/core/urlUtils';
 import { whenFalseOnce } from 'esri/core/watchUtils';
 
@@ -22,6 +27,8 @@ function MainMap({
   setLegendTocFilter,
   getCurrentOtherFilter,
   setOtherFilter,
+  lat,
+  lng,
 }) {
   const mapDiv = useRef(null);
   addProxyRule({
@@ -72,6 +79,46 @@ function MainMap({
       });
 
       addLayers(map, view).then(() => {
+        if (lat && lng) {
+          const polySym = {
+            type: 'simple-fill', // autocasts as new SimpleFillSymbol()
+            color: [140, 140, 222, 0.3],
+            outline: {
+              color: [0, 0, 0, 0.3],
+              width: 2,
+            },
+          };
+          const point = new Point({
+            longitude: lng,
+            latitude: lat,
+          });
+          const buffer = geodesicBuffer(point, 5, 'miles');
+
+          const markerSymbol = {
+            type: 'simple-marker',
+            color: [0, 100, 255, 0.9],
+            size: 10,
+            outline: {
+              color: [0, 0, 0, 0.3],
+              width: 2,
+            },
+          };
+          const pointGraphic = new Graphic({
+            geometry: point,
+            symbol: markerSymbol,
+          });
+          const graphicsLayer = map.findLayerById('gfxLayer');
+          graphicsLayer.add(pointGraphic);
+          graphicsLayer.add(
+            new Graphic({
+              geometry: buffer,
+              symbol: polySym,
+            })
+          );
+          view.goTo(pointGraphic);
+          view.zoom = 11;
+          //
+        }
         setupWidgets({
           map,
           view,
@@ -80,6 +127,8 @@ function MainMap({
           setCurrentFeature,
           getCurrentOtherFilter,
           setOtherFilter,
+          lat,
+          lng,
         });
       });
 

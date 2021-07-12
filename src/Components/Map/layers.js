@@ -1,6 +1,7 @@
 import layerConfig from './layersConfig';
 import FeatureLayer from 'esri/layers/FeatureLayer';
 import MapImageLayer from 'esri/layers/MapImageLayer';
+import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer';
 
 async function addLayers(map) {
   let layers = [];
@@ -37,6 +38,9 @@ async function addLayers(map) {
     }
     layers.push(layer);
   }
+  const gfxLayer = new GraphicsLayer({ id: 'gfxLayer' });
+
+  map.add(gfxLayer);
   map.addMany(layers);
 
   return layers;

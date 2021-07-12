@@ -11,16 +11,16 @@ const headerStyle = {
   alignItems: 'center',
   display: 'flex',
   justifyContent: 'space-between',
-  padding: '30px',
   gap: '10px',
+  margin: '10px',
 };
 
 export default function Header() {
   const history = useHistory();
   return (
     <div style={headerStyle}>
-      <Button variant="success" size="sm" onClick={() => history.goBack()}>
-        &laquo;
+      <Button variant="secondary" size="sm" onClick={() => history.push('/')}>
+        <i className="fa fa-home"></i>
       </Button>
       <img height="40" src={HeatReliefLogo} alt="HRN Logo" />
       <h3 style={{ fontSize: '20px', marginBottom: '0' }}>

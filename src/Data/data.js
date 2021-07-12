@@ -8,8 +8,10 @@ const getData = async function ({ lat, lng }) {
     returnGeometry: true,
     outFields: ['*'],
   });
-  const legendData = await getLegendData();
-  const data = features.map((feature) => {
+  // const legendData = await getLegendData();
+  let data = [];
+  for (let i = 0; i < features.length; i++) {
+    const feature = features[i];
     const { latitude, longitude } = feature.geometry;
     const distance = getDistanceFromLatLonInMiles(
       lat,
@@ -17,13 +19,15 @@ const getData = async function ({ lat, lng }) {
       latitude,
       longitude
     );
-    const image = getLegendImageByHydrationActivity(
-      legendData,
-      feature.attributes.HydrationActivities
+    const image = await getLegendImageByHydrationActivity(
+      feature.attributes.HydrationActivities,
+      feature.attributes.Collection
     );
 
-    return { ...feature.attributes, latitude, longitude, distance, image };
-  });
+    data.push({ ...feature.attributes, latitude, longitude, distance, image });
+  }
+
+  data = data.filter(({ distance }) => distance <= 5);
 
   data.sort((a, b) => a.distance - b.distance);
 
@@ -64,13 +68,18 @@ async function getLegendData() {
 // const codedValues = await getCodedHydrationValues();
 // console.log(legendData);
 
-function getLegendImageByHydrationActivity(legendData, activity) {
+async function getLegendImageByHydrationActivity(activity, collection) {
+  const legendData = await getLegendData();
   const hydration = {
     Emergency_Heat_Relief_Station: 'Emergency Heat Relief Station',
     Cooling_Center: 'Cooling Center',
     Hydration_Station: 'Hydration Station',
+    'Collection/Donation Site': 'Collection/Donation Site',
   };
-  const activityTitle = hydration[activity];
+  let activityTitle = hydration[activity];
+  if (!activityTitle && collection === 'Yes') {
+    activityTitle = 'Collection/Donation Site';
+  }
   if (activityTitle) {
     const [legendLayer] = legendData.filter(
       (layer) => layer.layerName === activityTitle

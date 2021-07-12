@@ -17,10 +17,10 @@ export default function Search() {
 
   useEffect(() => {
     const searchExtent = new Extent({
-      xmin: -114.68,
-      ymin: 31.29,
-      xmax: -109.06,
-      ymax: 36.99,
+      xmin: -112.465131,
+      ymin: 33.222813,
+      xmax: -111.605189,
+      ymax: 33.825446,
     });
 
     const search = new SearchWidget({
@@ -56,7 +56,7 @@ export default function Search() {
     <>
       <Jumbotron className="mt-5">
         <label style={{ fontWeight: '600' }}>
-          To get started, search for an address
+          To get started, search for and by address or zip code
         </label>
         <div style={searchDivStyle} id="search" ref={searchDiv}></div>
       </Jumbotron>

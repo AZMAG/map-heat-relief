@@ -3,6 +3,7 @@ import HeatReliefLogo from '../images/Heat-Relief-Logo.png';
 import Search from '../Components/Search/Search';
 import { Jumbotron, Button } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
+import DisclaimerModal from '../Modals/DisclaimerModal';
 
 const headerStyle = {
   color: 'white',
@@ -13,7 +14,7 @@ const headerStyle = {
 };
 const logoContainerStyle = {
   textAlign: 'center',
-  bottom: '5%',
+  bottom: '1%',
   position: 'absolute',
   width: '100vw',
 };
@@ -37,6 +38,7 @@ export default function Welcome() {
 
   return (
     <div>
+      <DisclaimerModal />
       <h3 style={headerStyle}>2021 Heat Relief Network</h3>
       <div className="ml-2 mr-2">
         <Search />

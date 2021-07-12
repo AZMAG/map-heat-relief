@@ -27,7 +27,7 @@ export default function MapButtons({ item }) {
         />
         Google Maps
       </Button>
-      <Button
+      {/* <Button
         onClick={() => openInAppleMaps(item)}
         style={{ marginLeft: '8px' }}
         variant="outline-secondary"
@@ -39,7 +39,7 @@ export default function MapButtons({ item }) {
           alt="Apple Maps Icon"
         />
         Apple Maps
-      </Button>
+      </Button> */}
     </div>
   );
 }

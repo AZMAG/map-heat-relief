@@ -1,6 +1,6 @@
 #sd-container {
   position: fixed;
-  bottom: 50px;
+  bottom: 120px;
   left: 45%;
   transform: translateY(-50%);
 }

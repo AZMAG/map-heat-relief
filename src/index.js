@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
+import 'mag-react-components/dist/index.css';
 
 ReactDOM.render(
   <React.StrictMode>
