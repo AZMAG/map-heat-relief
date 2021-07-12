@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 import HeatReliefLogo from '../../images/Heat-Relief-Logo.png';
+import AboutModal from '../../Modals/AboutModal';
 
 const headerStyle = {
   color: 'white',
@@ -17,15 +18,26 @@ const headerStyle = {
 
 export default function Header() {
   const history = useHistory();
+  const [aboutModalShown, setAboutModalShown] = useState(false);
+  function infoClicked() {
+    setAboutModalShown(true);
+  }
   return (
     <div style={headerStyle}>
+      <AboutModal
+        aboutModalShown={aboutModalShown}
+        setAboutModalShown={setAboutModalShown}
+      />
       <Button variant="secondary" size="sm" onClick={() => history.push('/')}>
         <i className="fa fa-home"></i>
       </Button>
       <img height="40" src={HeatReliefLogo} alt="HRN Logo" />
-      <h3 style={{ fontSize: '20px', marginBottom: '0' }}>
+      <h3 style={{ fontSize: '18px', marginBottom: '0' }}>
         2021 Heat Relief Network
       </h3>
+      <Button variant="secondary" size="sm" onClick={infoClicked}>
+        <i className="fa fa-info-circle"></i>
+      </Button>
     </div>
   );
 }
