@@ -3,7 +3,6 @@ import { Modal, Button } from 'react-bootstrap';
 
 export default function DisclaimerModal() {
   const hrnDisclaimerShown = localStorage.getItem('mag-hrnDisclaimer');
-  console.log({ hrnDisclaimerShown });
   const [disclaimerShown, setDisclaimerShown] = useState(
     hrnDisclaimerShown === '1' ? false : true
   );

@@ -116,8 +116,7 @@ function MainMap({
             })
           );
           view.goTo(pointGraphic);
-          view.zoom = 11;
-          //
+          view.zoom = 10;
         }
         setupWidgets({
           map,

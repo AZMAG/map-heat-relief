@@ -2,13 +2,21 @@ import ReactDOM from 'react-dom';
 import MapButtons from '../../Components/MapButtons';
 
 function heatReliefPopup() {
+  function petsAllowed(Pets) {
+    return (
+      <>
+        <b>Pets Allowed</b>: {Pets}
+      </>
+    );
+  }
+
   return {
     outFields: ['*'],
     title: ({ graphic }) => {
       return graphic.layer.title;
     },
     content: ({ graphic }) => {
-      const { PopupAddress, PopupHours, PopupOrganization } =
+      const { PopupAddress, PopupHours, PopupOrganization, Pets } =
         graphic.attributes;
       const popupDiv = document.createElement('div');
       ReactDOM.render(
@@ -17,6 +25,7 @@ function heatReliefPopup() {
           <b>Organization</b>: {PopupOrganization} <br />
           <b>Address</b>: {PopupAddress} <br />
           <b>Hours</b>: {PopupHours} <br />
+          {Pets ? petsAllowed(Pets) : ''}
           <MapButtons item={graphic.attributes} />
         </>,
         popupDiv

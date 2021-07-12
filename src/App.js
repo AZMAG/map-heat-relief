@@ -1,8 +1,8 @@
 import './App.css';
 import { HashRouter as Router, Route, Switch } from 'react-router-dom';
-import Welcome from './Pages/Welcome';
-import MainMap from './Pages/Map';
-import Listing from './Pages/Listing';
+import WelcomePage from './Pages/WelcomePage';
+import MapPage from './Pages/MapPage';
+import ListingPage from './Pages/ListingPage';
 
 function App() {
   return (
@@ -10,13 +10,13 @@ function App() {
       <Router>
         <Switch>
           <Route path="/map">
-            <MainMap />
+            <MapPage />
           </Route>
           <Route path="/listing">
-            <Listing />
+            <ListingPage />
           </Route>
           <Route path="/">
-            <Welcome />
+            <WelcomePage />
           </Route>
         </Switch>
       </Router>

@@ -30,6 +30,8 @@ export default function CustomMap() {
           onClick={() => {
             if (lat && lng) {
               history.push(`/listing?lat=${lat}&lng=${lng}`);
+            } else {
+              history.push('/listing');
             }
           }}
           variant="secondary"

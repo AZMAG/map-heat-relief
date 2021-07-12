@@ -1,5 +1,5 @@
 @import 'https://js.arcgis.com/4.19/@arcgis/core/assets/esri/themes/light/main.css';
-@import 'https://use.fontawesome.com/releases/v5.1.0/css/all.css';
+@import 'https://use.fontawesome.com/releases/v5.12.0/css/all.css';
 
 .app {
   background-color: #282c34;
@@ -20,4 +20,8 @@ h3 {
 .badge {
   padding: 3px 5px;
   font-size: 11.5px;
+}
+
+.esri-widget__heading.esri-popup__header-title {
+  color: white;
 }
