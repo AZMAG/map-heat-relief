@@ -1,9 +1,1 @@
-
-Have 3 filter buttons across the top with their symbols… make it obvious and short text
-•	Cooling  or Cool Down
-•	Hydration or Hydrate
-•	Donation  or Donate
-
 Info button that explains what they are/what is heat relief, you can copy text over the previous viewer
-
-Add pet info to cooling center pop-up
