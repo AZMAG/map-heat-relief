@@ -61,8 +61,9 @@ function MainMap({ lat, lng }) {
           alignment: 'top-center',
           dockEnabled: true,
           collapseEnabled: false,
+          actions: [],
           dockOptions: {
-            position: 'top-center',
+            // position: 'top-center',
             buttonEnabled: false,
             breakpoint: false,
           },

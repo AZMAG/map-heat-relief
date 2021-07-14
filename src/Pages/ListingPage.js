@@ -136,7 +136,7 @@ export default function ListingPage() {
         variant="secondary"
         size="sm"
         style={{
-          width: '40px',
+          width: '130px',
           margin: 'auto',
           position: 'absolute',
           bottom: 5,
@@ -144,7 +144,7 @@ export default function ListingPage() {
           right: 0,
         }}
       >
-        <i className="fas fa-map"></i>
+        <i className="mr-1 fas fa-map"></i> Map Page
       </Button>
     </div>
   );

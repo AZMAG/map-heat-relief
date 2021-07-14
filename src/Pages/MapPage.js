@@ -8,7 +8,7 @@ import { useHistory } from 'react-router-dom';
 const mapPageStyle = {
   display: 'flex',
   flexDirection: 'column',
-  height: '100vh',
+  height: 'calc(90vh - 30px)',
 };
 
 export default function CustomMap() {
@@ -37,7 +37,7 @@ export default function CustomMap() {
           variant="secondary"
           size="sm"
           style={{
-            width: '40px',
+            width: '130px',
             margin: 'auto',
             position: 'absolute',
             bottom: 5,
@@ -46,7 +46,7 @@ export default function CustomMap() {
           }}
           // className=""
         >
-          <i className="fas fa-list"></i>
+          <i className=" mr-1 fas fa-list"></i> List Page
         </Button>
       </div>
     </>
