@@ -3,7 +3,8 @@ import Header from '../Components/Header/Header';
 import { useLocation } from 'react-router-dom';
 import { MainMap } from '../Components/Map/Map';
 import { Button } from 'react-bootstrap';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import ReactGA from 'react-ga';
 
 const mapPageStyle = {
   display: 'flex',
@@ -12,9 +13,11 @@ const mapPageStyle = {
 };
 
 export default function CustomMap() {
+  ReactGA.initialize('UA-29422512-1');
+  ReactGA.pageview(window.location.pathname + window.location.search);
   const rawSearch = useLocation().search;
   const searchParams = new URLSearchParams(rawSearch);
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const lat = searchParams.get('lat');
   const lng = searchParams.get('lng');
@@ -29,9 +32,14 @@ export default function CustomMap() {
         <Button
           onClick={() => {
             if (lat && lng) {
-              history.push(`/listing?lat=${lat}&lng=${lng}`);
+              ReactGA.event({
+                category: 'Button Click',
+                action: 'Clicked Listing Button',
+                value: 1,
+              });
+              navigate(`/listing?lat=${lat}&lng=${lng}`);
             } else {
-              history.push('/listing');
+              navigate('/listing');
             }
           }}
           variant="secondary"
@@ -46,7 +54,7 @@ export default function CustomMap() {
           }}
           // className=""
         >
-          <i className=" mr-1 fas fa-list"></i> List Page
+          <i className=" mr-1 fas fa-list"></i> List View
         </Button>
       </div>
     </>

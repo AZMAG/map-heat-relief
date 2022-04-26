@@ -1,5 +1,4 @@
 import { ListGroup } from 'react-bootstrap';
-
 import ListItem from './ListItem';
 
 export default function Listing({ filteredItems }) {

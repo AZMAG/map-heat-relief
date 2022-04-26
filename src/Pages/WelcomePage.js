@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import HeatReliefLogo from '../images/Heat-Relief-Logo.png';
 import Search from '../Components/Search/Search';
 import { Jumbotron, Button } from 'react-bootstrap';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import DisclaimerModal from '../Modals/DisclaimerModal';
 import AboutModal from '../Modals/AboutModal';
+import ReactGA from 'react-ga';
 
 const headerStyle = {
   color: 'white',
@@ -25,12 +26,14 @@ const orStyle = {
 };
 
 export default function Welcome() {
-  const history = useHistory();
+  ReactGA.initialize('UA-29422512-1');
+  ReactGA.pageview(window.location.pathname + window.location.search);
+  const navigate = useNavigate();
   const [aboutModalShown, setAboutModalShown] = useState(false);
 
   function exploreClicked(e) {
     e.preventDefault();
-    history.push('/map');
+    navigate('/map');
   }
 
   function infoClicked() {
@@ -52,7 +55,9 @@ export default function Welcome() {
         }}
       >
         <img height="75" src={HeatReliefLogo} alt="Heat Relief Network Logo" />
-        <h3 style={headerStyle}>2021 Heat Relief Network</h3>
+        <h3 style={headerStyle}>
+          {new Date().getFullYear()} Heat Relief Network
+        </h3>
       </div>
       <div className="ml-2 mr-2">
         <Search />

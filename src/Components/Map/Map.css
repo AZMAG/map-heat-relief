@@ -37,3 +37,8 @@
 .esri-legend__layer-table {
   margin-bottom: 2px;
 }
+
+.esri-menu__list-item {
+  text-decoration: underline;
+  color: blue;
+}

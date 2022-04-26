@@ -43,18 +43,9 @@ function heatReliefPopup() {
 }
 
 const layers = [
-  // {
-  //   id: 'heat_relief_0',
-  //   url: 'https://geo.azmag.gov/arcgis/rest/services/maps/Hydration/MapServer/0',
-  //   includeInLayersList: true,
-  //   visible: true,
-  //   title: 'Emergency Heat Relief Station',
-  //   legend: true,
-  //   popupTemplate: heatReliefPopup(),
-  // },
   {
     id: 'heat_relief_3',
-    url: 'https://geo.azmag.gov/arcgis/rest/services/maps/Hydration/MapServer/3',
+    url: 'https://geo.azmag.gov/arcgis/rest/services/maps/Heat_Relief_Network/MapServer/2',
     includeInLayersList: true,
     visible: true,
     title: 'Donation Site',
@@ -63,7 +54,7 @@ const layers = [
   },
   {
     id: 'heat_relief_2',
-    url: 'https://geo.azmag.gov/arcgis/rest/services/maps/Hydration/MapServer/2',
+    url: 'https://geo.azmag.gov/arcgis/rest/services/maps/Heat_Relief_Network/MapServer/1',
     includeInLayersList: true,
     visible: true,
     title: 'Hydration Station',
@@ -73,7 +64,7 @@ const layers = [
 
   {
     id: 'heat_relief_1',
-    url: 'https://geo.azmag.gov/arcgis/rest/services/maps/Hydration/MapServer/1',
+    url: 'https://geo.azmag.gov/arcgis/rest/services/maps/Heat_Relief_Network/MapServer/0',
     includeInLayersList: true,
     visible: true,
     title: 'Cooling Center',

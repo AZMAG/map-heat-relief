@@ -1,10 +1,10 @@
-import QueryTask from 'esri/tasks/QueryTask';
+import QueryTask from '@arcgis/core/tasks/QueryTask';
 const queryUrl =
-  'https://geo.azmag.gov/arcgis/rest/services/maps/Hydration/MapServer/4';
+  'https://geo.azmag.gov/arcgis/rest/services/maps/Heat_Relief_Network/MapServer/3';
 const qt = new QueryTask({ url: queryUrl });
 const getData = async function ({ lat, lng }) {
   const { features } = await qt.execute({
-    where: 'HRN2021=1',
+    where: 'HRN2022=1',
     returnGeometry: true,
     outFields: ['*'],
   });

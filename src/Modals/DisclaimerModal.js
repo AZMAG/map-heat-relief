@@ -23,8 +23,8 @@ export default function DisclaimerModal() {
         may be subject to change as well. For those reasons, users of this
         website should independently verify, as needed, information provided
         herein. To the extent that any individual has a medical emergency in
-        regard to heat related issues, they should contact their doctor or call
-        911 immediately.{' '}
+        regard to heat-related issues, they should contact their doctor or call
+        9-1-1 immediately.{' '}
       </Modal.Body>
       <Modal.Footer style={{ justifyContent: 'center' }}>
         <Button variant="success" onClick={handleClose}>

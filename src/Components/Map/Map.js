@@ -1,17 +1,17 @@
 import React, { useRef, useEffect } from 'react';
 
-import ArcGISMap from 'esri/Map';
-import MapView from 'esri/views/MapView';
-import VectorTileLayer from 'esri/layers/VectorTileLayer';
-import Basemap from 'esri/Basemap';
-import Graphic from 'esri/Graphic';
+import ArcGISMap from '@arcgis/core/Map';
+import MapView from '@arcgis/core/views/MapView';
+import VectorTileLayer from '@arcgis/core/layers/VectorTileLayer';
+import Basemap from '@arcgis/core/Basemap';
+import Graphic from '@arcgis/core/Graphic';
 import setupWidgets from './Widgets';
 import addLayers from './layers';
 import Point from '@arcgis/core/geometry/Point';
-import { geodesicBuffer } from 'esri/geometry/geometryEngine';
-import { addProxyRule } from 'esri/core/urlUtils';
-import Extent from 'esri/geometry/Extent';
-// import { whenFalseOnce } from 'esri/core/watchUtils';
+import { geodesicBuffer } from '@arcgis/core/geometry/geometryEngine';
+import Extent from '@arcgis/core/geometry/Extent';
+import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
+// import { whenFalseOnce } from '@arcgis/core/core/watchUtils';
 
 import './Map.css';
 
@@ -21,10 +21,6 @@ let layerView;
 
 function MainMap({ lat, lng }) {
   const mapDiv = useRef(null);
-  addProxyRule({
-    urlPrefix: 'geo.azmag.gov',
-    proxyUrl: 'https://geo.azmag.gov/Proxy/proxy.ashx',
-  });
 
   useEffect(() => {
     if (mapDiv.current) {
@@ -75,32 +71,34 @@ function MainMap({ lat, lng }) {
         spatialReference: {
           wkid: 102100,
         },
-        xmax: -12399883.303088231,
-        xmin: -12546642.690914528,
-        ymax: 3993315.240863136,
-        ymin: 3925821.209899271,
+        xmax: -12339330.791267041,
+        xmin: -12592490.735267404,
+        ymax: 4134647.588827106,
+        ymin: 3778756.073348334,
       });
 
       view.watch('extent', function (extent) {
-        var currentCenter = extent.center;
-        if (!maxExtent.contains(currentCenter)) {
-          var newCenter = extent.center;
-          if (currentCenter.x < maxExtent.xmin) {
-            newCenter.x = maxExtent.xmin;
-          }
-          if (currentCenter.x > maxExtent.xmax) {
-            newCenter.x = maxExtent.xmax;
-          }
-          if (currentCenter.y < maxExtent.ymin) {
-            newCenter.y = maxExtent.ymin;
-          }
-          if (currentCenter.y > maxExtent.ymax) {
-            newCenter.y = maxExtent.ymax;
-          }
+        if (extent) {
+          var currentCenter = extent.center;
+          if (!maxExtent.contains(currentCenter)) {
+            var newCenter = extent.center;
+            if (currentCenter.x < maxExtent.xmin) {
+              newCenter.x = maxExtent.xmin;
+            }
+            if (currentCenter.x > maxExtent.xmax) {
+              newCenter.x = maxExtent.xmax;
+            }
+            if (currentCenter.y < maxExtent.ymin) {
+              newCenter.y = maxExtent.ymin;
+            }
+            if (currentCenter.y > maxExtent.ymax) {
+              newCenter.y = maxExtent.ymax;
+            }
 
-          var newExtent = view.extent.clone();
-          newExtent.centerAt(newCenter);
-          view.extent = newExtent;
+            var newExtent = view.extent.clone();
+            newExtent.centerAt(newCenter);
+            view.extent = newExtent;
+          }
         }
       });
 

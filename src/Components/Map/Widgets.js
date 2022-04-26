@@ -1,13 +1,13 @@
-import Legend from 'esri/widgets/Legend';
-import Home from 'esri/widgets/Home';
-import Zoom from 'esri/widgets/Zoom';
-import Expand from 'esri/widgets/Expand';
-import Locate from 'esri/widgets/Locate';
-import BasemapToggle from 'esri/widgets/BasemapToggle';
+import Legend from '@arcgis/core/widgets/Legend';
+import Home from '@arcgis/core/widgets/Home';
+import Zoom from '@arcgis/core/widgets/Zoom';
+import Expand from '@arcgis/core/widgets/Expand';
+// import Locate from '@arcgis/core/widgets/Locate';
+import BasemapToggle from '@arcgis/core/widgets/BasemapToggle';
 
 async function setupWidgets({ map, view }) {
-  const locateBtn = new Locate({ view });
-  view.ui.add(locateBtn, 'top-left');
+  // const locateBtn = new Locate({ view });
+  // view.ui.add(locateBtn, 'top-left');
 
   const homeWidget = new Home({ view });
   view.ui.add(homeWidget, 'top-left');

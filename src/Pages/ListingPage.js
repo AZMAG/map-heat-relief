@@ -8,11 +8,14 @@ import Listing from '../Components/Listing/Listing';
 import Header from '../Components/Header/Header';
 import ScrollDown from '../Components/ScrollDown/ScrollDown';
 import FilterButtons from '../Components/Listing/FilterButtons';
+import ReactGA from 'react-ga';
 
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 export default function ListingPage() {
-  const history = useHistory();
+  ReactGA.initialize('UA-29422512-1');
+  ReactGA.pageview(window.location.pathname + window.location.search);
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [items, setItems] = useState([]);
   const [filteredItems, setFilteredItems] = useState([]);
@@ -100,6 +103,24 @@ export default function ListingPage() {
           </div>
         ) : (
           <>
+            {filteredItems.length === 0 &&
+            lat &&
+            lng &&
+            (cooling || hydration || donation) ? (
+              <>
+                <br />
+                <p>
+                  No locations found within 5 miles. Please try a different
+                  location
+                </p>
+                <Button variant="secondary" onClick={() => navigate('/')}>
+                  <i className="mr-2 fa fa-home"></i>
+                  Return to home
+                </Button>
+              </>
+            ) : (
+              ''
+            )}
             <div
               style={{ display: 'flex', alignItems: 'center', margin: '8px' }}
             >
@@ -118,7 +139,7 @@ export default function ListingPage() {
                 display: !cooling && !hydration && !donation ? 'block' : 'none',
               }}
             >
-              No locations selected. Select at least one of the heat relief
+              No locations found. Select at least one of the heat relief
               category buttons above to get started.
             </div>
             {scrolled ? '' : <ScrollDown />}
@@ -128,9 +149,14 @@ export default function ListingPage() {
       <Button
         onClick={() => {
           if (lat && lng) {
-            history.push(`/map?lat=${lat}&lng=${lng}`);
+            ReactGA.event({
+              category: 'Button Click',
+              action: 'Clicked Map Button',
+              value: 1,
+            });
+            navigate(`/map?lat=${lat}&lng=${lng}`);
           } else {
-            history.push(`/map`);
+            navigate(`/map`);
           }
         }}
         variant="secondary"
@@ -144,7 +170,7 @@ export default function ListingPage() {
           right: 0,
         }}
       >
-        <i className="mr-1 fas fa-map"></i> Map Page
+        <i className="mr-1 fas fa-map"></i> Map View
       </Button>
     </div>
   );

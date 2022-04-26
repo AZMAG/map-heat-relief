@@ -1,9 +1,9 @@
 import React, { useRef, useEffect } from 'react';
-import SearchWidget from 'esri/widgets/Search';
-import Locator from 'esri/tasks/Locator';
-import Extent from 'esri/geometry/Extent';
+import SearchWidget from '@arcgis/core/widgets/Search';
+import Locator from '@arcgis/core/tasks/Locator';
+import Extent from '@arcgis/core/geometry/Extent';
 import { Jumbotron } from 'react-bootstrap';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const searchDivStyle = {
   textAlign: 'center',
@@ -13,14 +13,14 @@ const searchDivStyle = {
 
 export default function Search() {
   const searchDiv = useRef(null);
-  const history = useHistory();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const searchExtent = new Extent({
-      xmin: -112.465131,
+      xmin: -113.765131,
       ymin: 33.222813,
-      xmax: -111.605189,
-      ymax: 33.825446,
+      xmax: -111.205189,
+      ymax: 34.825446,
     });
 
     const search = new SearchWidget({
@@ -48,15 +48,15 @@ export default function Search() {
     });
     search.on('select-result', (e) => {
       const { latitude, longitude } = e.result.feature.geometry;
-      history.push(`/listing?lat=${latitude}&lng=${longitude}`);
+      navigate(`/listing?lat=${latitude}&lng=${longitude}`);
     });
-  }, [history]);
+  }, [navigate]);
 
   return (
     <>
       <Jumbotron style={{ marginBottom: '10px' }} className="mt-2">
         <label style={{ fontWeight: '600' }}>
-          To get started, search for and by address or zip code
+          To get started, search by address or zip code
         </label>
         <div style={searchDivStyle} id="search" ref={searchDiv}></div>
       </Jumbotron>
