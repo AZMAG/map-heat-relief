@@ -1,6 +1,6 @@
-import { useRef, useEffect } from 'react';
-import Legend from '@arcgis/core/widgets/Legend';
-import { Form } from 'react-bootstrap';
+import { useRef, useEffect } from "react";
+import Legend from "@arcgis/core/widgets/Legend";
+import { Form } from "react-bootstrap";
 
 export default function CustomLegend({ view, store }) {
   const legendRef = useRef();
@@ -20,7 +20,7 @@ export default function CustomLegend({ view, store }) {
       <Form.Check
         onChange={checkChanged}
         value={store.openNowChecked}
-        type={'switch'}
+        type={"switch"}
         id={`default`}
         label={`Open Now`}
       />
