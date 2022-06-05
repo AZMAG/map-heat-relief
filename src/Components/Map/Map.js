@@ -8,18 +8,14 @@ import Graphic from '@arcgis/core/Graphic';
 import setupWidgets from './Widgets';
 import addLayers from './layers';
 import Point from '@arcgis/core/geometry/Point';
-import { geodesicBuffer } from '@arcgis/core/geometry/geometryEngine';
 import Extent from '@arcgis/core/geometry/Extent';
-import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
-// import { whenFalseOnce } from '@arcgis/core/core/watchUtils';
+import { whenFalseOnce } from '@arcgis/core/core/watchUtils';
+import { useDataStore } from '../../Stores/DataContext';
 
 import './Map.css';
 
-let map;
-let view;
-let layerView;
-
 function MainMap({ lat, lng }) {
+  const store = useDataStore();
   const mapDiv = useRef(null);
 
   useEffect(() => {
@@ -27,17 +23,17 @@ function MainMap({ lat, lng }) {
       const basemap = new Basemap({
         baseLayers: [
           new VectorTileLayer({
-            url: 'https://azmag.maps.arcgis.com/sharing/rest/content/items/28f6ec938f634223be8fc577d2a86ca5/resources/styles/root.json?f=json',
+            url: 'https://azmag.maps.arcgis.com/sharing/rest/content/items/28f6ec938f634223be8fc577d2a86ca5/resources/styles/root.json',
           }),
         ],
       });
 
-      map = new ArcGISMap({
+      const _map = new ArcGISMap({
         basemap,
       });
 
-      view = new MapView({
-        map,
+      const _view = new MapView({
+        map: _map,
         container: mapDiv.current,
         extent: {
           spatialReference: {
@@ -59,9 +55,8 @@ function MainMap({ lat, lng }) {
           collapseEnabled: false,
           actions: [],
           dockOptions: {
-            // position: 'top-center',
             buttonEnabled: false,
-            breakpoint: false,
+            breakpoint: true,
           },
         },
         ui: { components: [] },
@@ -77,7 +72,7 @@ function MainMap({ lat, lng }) {
         ymin: 3778756.073348334,
       });
 
-      view.watch('extent', function (extent) {
+      _view.watch('extent', function (extent) {
         if (extent) {
           var currentCenter = extent.center;
           if (!maxExtent.contains(currentCenter)) {
@@ -95,28 +90,20 @@ function MainMap({ lat, lng }) {
               newCenter.y = maxExtent.ymax;
             }
 
-            var newExtent = view.extent.clone();
+            var newExtent = _view.extent.clone();
             newExtent.centerAt(newCenter);
-            view.extent = newExtent;
+            _view.extent = newExtent;
           }
         }
       });
 
-      addLayers(map, view).then(() => {
+      (async () => {
+        await addLayers(_map, _view, store);
         if (lat && lng) {
-          const polySym = {
-            type: 'simple-fill', // autocasts as new SimpleFillSymbol()
-            color: [140, 140, 222, 0.3],
-            outline: {
-              color: [0, 0, 0, 0.3],
-              width: 2,
-            },
-          };
           const point = new Point({
             longitude: lng,
             latitude: lat,
           });
-          const buffer = geodesicBuffer(point, 5, 'miles');
 
           const markerSymbol = {
             type: 'simple-marker',
@@ -131,35 +118,34 @@ function MainMap({ lat, lng }) {
             geometry: point,
             symbol: markerSymbol,
           });
-          const graphicsLayer = map.findLayerById('gfxLayer');
+          const graphicsLayer = _map.findLayerById('gfxLayer');
           graphicsLayer.add(pointGraphic);
-          graphicsLayer.add(
-            new Graphic({
-              geometry: buffer,
-              symbol: polySym,
-            })
-          );
-          view.goTo(pointGraphic);
-          view.zoom = 10;
-        }
-        setupWidgets({
-          map,
-          view,
-          lat,
-          lng,
-        });
-      });
 
-      // whenFalseOnce(view, 'updating', () => {
-      //   // setMapLoaded(true);
-      // });
+          _view.goTo(pointGraphic);
+          _view.zoom = 13;
+          if (window.innerWidth > 900) {
+            _view.popup.dockEnabled = false;
+            _view.popup.open({
+              title: 'Search Result',
+              location: point,
+              content:
+                '<br /><b>This is your search location.  View the map to see heat relief locations nearby.</b>',
+            });
+          }
+        }
+      })();
+
+      setupWidgets(_map, _view, store);
+
+      whenFalseOnce(_view, 'updating', () => {
+        store.mapLoaded = true;
+        store.map = _map;
+        store.view = _view;
+      });
     }
-  }, [lat, lng]);
+  }, [lat, lng, store]);
 
   return <div className="mapDiv" ref={mapDiv}></div>;
 }
-function getMapRef() {
-  return { map, view, layerView };
-}
 
-export { getMapRef, MainMap };
+export default MainMap;

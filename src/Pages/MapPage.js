@@ -1,16 +1,10 @@
 import React from 'react';
 import Header from '../Components/Header/Header';
 import { useLocation } from 'react-router-dom';
-import { MainMap } from '../Components/Map/Map';
+import MainMap from '../Components/Map/Map';
 import { Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import ReactGA from 'react-ga';
-
-const mapPageStyle = {
-  display: 'flex',
-  flexDirection: 'column',
-  height: 'calc(90vh - 30px)',
-};
 
 export default function CustomMap() {
   ReactGA.initialize('UA-29422512-1');
@@ -24,12 +18,13 @@ export default function CustomMap() {
 
   return (
     <>
-      <div style={mapPageStyle}>
+      <div className="map-page">
         <Header />
-        <div style={{ flex: 3 }}>
+        <div className="map-container">
           <MainMap lat={lat} lng={lng} />
         </div>
         <Button
+          className="list-view-btn"
           onClick={() => {
             if (lat && lng) {
               ReactGA.event({
@@ -44,15 +39,6 @@ export default function CustomMap() {
           }}
           variant="secondary"
           size="sm"
-          style={{
-            width: '130px',
-            margin: 'auto',
-            position: 'absolute',
-            bottom: 5,
-            left: 0,
-            right: 0,
-          }}
-          // className=""
         >
           <i className=" mr-1 fas fa-list"></i> List View
         </Button>

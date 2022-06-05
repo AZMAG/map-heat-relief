@@ -44,7 +44,7 @@ function heatReliefPopup() {
 
 const layers = [
   {
-    id: 'heat_relief_3',
+    id: 'donation',
     url: 'https://geo.azmag.gov/arcgis/rest/services/maps/Heat_Relief_Network/MapServer/2',
     includeInLayersList: true,
     visible: true,
@@ -53,7 +53,7 @@ const layers = [
     popupTemplate: heatReliefPopup(),
   },
   {
-    id: 'heat_relief_2',
+    id: 'hydration',
     url: 'https://geo.azmag.gov/arcgis/rest/services/maps/Heat_Relief_Network/MapServer/1',
     includeInLayersList: true,
     visible: true,
@@ -61,9 +61,8 @@ const layers = [
     legend: true,
     popupTemplate: heatReliefPopup(),
   },
-
   {
-    id: 'heat_relief_1',
+    id: 'cooling',
     url: 'https://geo.azmag.gov/arcgis/rest/services/maps/Heat_Relief_Network/MapServer/0',
     includeInLayersList: true,
     visible: true,

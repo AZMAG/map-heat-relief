@@ -1,8 +1,13 @@
-import { createContext, useContext, useEffect } from 'react';
+import { createContext, useContext } from 'react';
+
+import { useLocation } from 'react-router-dom';
 import { createDataStore } from './createDataStore';
 import { useLocalObservable } from 'mobx-react-lite';
 import { autorun } from 'mobx';
 import { configure } from 'mobx';
+import getData from './getData';
+import isOpenNow from './isOpenNow';
+import getDistanceFromLatLonInMiles from './getDistanceFromLatLonInMiles';
 
 configure({
   enforceActions: 'never',
@@ -11,144 +16,59 @@ configure({
 const DataContext = createContext(null);
 
 export const DataProvider = ({ children }) => {
+  const location = useLocation();
   const store = useLocalObservable(createDataStore);
+  const rawSearch = location.search;
+  const searchParams = new URLSearchParams(rawSearch);
 
-  useEffect(() => {
-    (async () => {
-      await store.loadParkPoints();
-      store.filteredParksCount = store.parks.length;
-    })();
-  }, [store]);
+  const lat = searchParams.get('lat');
+  const lng = searchParams.get('lng');
 
-  function isParkActive(park) {
-    return store.activeAmenities.every((amenity) => {
-      return park[amenity.key] === 1;
-    });
-  }
+  store.lat = lat;
+  store.lng = lng;
 
-  autorun(() => {
-    if (store.attractionZoom) {
-      (async () => {
-        store.mapLoaded = false;
-        const where = `OBJECTID = ${store.attractionZoom}`;
-        const res = await store.bliLayer.queryFeatures({
-          where,
-          outFields: ['*'],
-          returnGeometry: true,
-          outSpatialReference: store.view.spatialReference,
-        });
-        await store.view.goTo(res.features);
-        // store.view.zoom = 11;
-        store.view.popup.close();
-        store.view.popup.open({
-          location: res.features[0].geometry,
-          features: res.features,
-        });
-        store.attractionZoom = null;
-        store.mapLoaded = true;
-      })();
-    }
-  });
+  (async () => {
+    store.points = await getData();
+    store.dataLoading = false;
+  })();
 
   autorun(() => {
-    if (store.parkZoom) {
-      (async () => {
-        store.mapLoaded = false;
-        const where = `ParkID = ${store.parkZoom}`;
-        const { extent } = await store.parksLayer.queryExtent({
-          where,
-          returnGeometry: true,
-          outSpatialReference: store.view.spatialReference,
-        });
-
-        await store.view.goTo(extent.expand(3));
-        // store.view.zoom = 13;
-        store.view.popup.close();
-        const res2 = await store.parkPointsLayer.queryFeatures({
-          where,
-          returnGeometry: true,
-          outFields: ['*'],
-          outSpatialReference: store.view.spatialReference,
-        });
-        store.view.popup.open({
-          location: res2.features[0].geometry,
-          features: res2.features,
-        });
-        store.parkZoom = null;
-        store.mapLoaded = true;
-      })();
-    }
-  });
-
-  autorun(() => {
-    if (store.parkPointsLayerView) {
-      const where =
-        'ParkID IN(' +
-        store.filteredParks.map(({ ParkID }) => ParkID).join(',') +
-        ')';
-      store.parkPointsLayerView.filter = {
-        where,
-      };
-    }
-  });
-
-  autorun(() => {
-    (async () => {
-      if (store.bliLayerView) {
-        const selectedAttractions = store.attractionItems.filter(
-          (item) => item.checked
-        );
-        if (selectedAttractions.length === 1) {
-          const selectedAttraction = selectedAttractions[0];
-          store.attractionsLoading = true;
-          store.bliLayerView.filter = {
-            where: selectedAttraction.queryValue,
-          };
-          store.bliLayer.renderer = {
-            type: 'simple',
-            symbol: {
-              type: 'picture-marker',
-              url: selectedAttraction.image,
-              width: '17px',
-              height: '17px',
-            },
-          };
-
-          const data = await store.bliLayer.queryFeatures({
-            where: selectedAttraction.queryValue,
-            outFields: ['Name', 'City', 'OBJECTID'],
-          });
-          store.matchingAttractions = data.features.map(
-            (feature) => feature.attributes
+    if (!store.dataLoading) {
+      if (store.points && store.points.length > 0 && store.lat && store.lng) {
+        store.points = store.points.map((point) => {
+          const distance = getDistanceFromLatLonInMiles(
+            store.lat,
+            store.lng,
+            point.latitude,
+            point.longitude
           );
-          store.bliLayer.visible = true;
-          store.attractionsLoading = false;
-        } else {
-          store.bliLayer.visible = false;
-          store.matchingAttractions = [];
-        }
+          point.distance = distance;
+          return point;
+        });
       }
-    })();
+    }
   });
 
   autorun(() => {
-    (async () => {
-      const includedParks = [];
-      if (store.activeAmenities.length === 0) {
-        store.filteredParks = store.parks;
-        store.filteredParksCount = store.parks.length;
+    if (!store.dataLoading && store.mapLoaded) {
+      const filteredPoints = store.points.filter((point) => {
+        const isOpen = isOpenNow(point);
+        return isOpen;
+      });
+      store.openNowCount = filteredPoints.length;
+      if (store.openNowChecked) {
+        const objectIds = filteredPoints.map(({ objectid }) => objectid);
+        const filter = { objectIds };
+
+        store.coolingLayerView.filter = filter;
+        store.hydrationLayerView.filter = filter;
+        store.donationLayerView.filter = filter;
       } else {
-        for (let i = 0; i < store.parks.length; i++) {
-          const park = store.parks[i];
-          const active = isParkActive(park);
-          if (active) {
-            includedParks.push({ ...park });
-          }
-        }
-        store.filteredParks = includedParks;
-        store.filteredParksCount = includedParks.length;
+        store.coolingLayerView.filter = null;
+        store.hydrationLayerView.filter = null;
+        store.donationLayerView.filter = null;
       }
-    })();
+    }
   });
 
   return <DataContext.Provider value={store}>{children}</DataContext.Provider>;

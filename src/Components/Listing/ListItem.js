@@ -71,7 +71,7 @@ export default function ListItem({ item }) {
       </p>
       {item.Pets === 'Yes' ? (
         <p style={listItemPStyle}>
-          <i class="fas fa-dog"></i> Pets Allowed
+          <i className="fas fa-dog"></i> Pets Allowed
         </p>
       ) : (
         ''

@@ -1,6 +1,5 @@
 import React, { useRef, useEffect } from 'react';
 import SearchWidget from '@arcgis/core/widgets/Search';
-import Locator from '@arcgis/core/tasks/Locator';
 import Extent from '@arcgis/core/geometry/Extent';
 import { Jumbotron } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
@@ -28,9 +27,7 @@ export default function Search() {
       includeDefaultSources: false,
       sources: [
         {
-          locator: new Locator(
-            '//geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer'
-          ),
+          url: '//geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer',
           singleLineFieldName: 'SingleLine',
           autoNavigate: true,
           enableInfoWindow: true,
@@ -48,13 +45,17 @@ export default function Search() {
     });
     search.on('select-result', (e) => {
       const { latitude, longitude } = e.result.feature.geometry;
-      navigate(`/listing?lat=${latitude}&lng=${longitude}`);
+      if (window.innerWidth > 900) {
+        navigate(`/map?lat=${latitude}&lng=${longitude}`);
+      } else {
+        navigate(`/listing?lat=${latitude}&lng=${longitude}`);
+      }
     });
   }, [navigate]);
 
   return (
     <>
-      <Jumbotron style={{ marginBottom: '10px' }} className="mt-2">
+      <Jumbotron>
         <label style={{ fontWeight: '600' }}>
           To get started, search by address or zip code
         </label>
