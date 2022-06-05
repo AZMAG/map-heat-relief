@@ -1,5 +1,5 @@
-import ReactDOM from 'react-dom';
-import MapButtons from '../../Components/MapButtons';
+import ReactDOM from "react-dom";
+import MapButtons from "../../Components/MapButtons";
 
 function heatReliefPopup() {
   function petsAllowed(Pets) {
@@ -11,7 +11,7 @@ function heatReliefPopup() {
   }
 
   return {
-    outFields: ['*'],
+    outFields: ["*"],
     title: ({ graphic }) => {
       return graphic.layer.title;
     },
@@ -23,16 +23,16 @@ function heatReliefPopup() {
         Pets,
         PrimaryPhone,
       } = graphic.attributes;
-      const popupDiv = document.createElement('div');
+      const popupDiv = document.createElement("div");
       ReactDOM.render(
         <>
           <br />
           <b>Organization</b>: {PopupOrganization} <br />
           <b>Address</b>: {PopupAddress} <br />
           <b>Hours</b>: {PopupHours} <br />
-          <b>Phone</b>: {<a href={`tel:${PrimaryPhone}`}>{PrimaryPhone}</a>}{' '}
+          <b>Phone</b>: {<a href={`tel:${PrimaryPhone}`}>{PrimaryPhone}</a>}{" "}
           <br />
-          {Pets ? petsAllowed(Pets) : ''}
+          {Pets ? petsAllowed(Pets) : ""}
           <MapButtons item={graphic.attributes} />
         </>,
         popupDiv
@@ -44,29 +44,29 @@ function heatReliefPopup() {
 
 const layers = [
   {
-    id: 'donation',
-    url: 'https://geo.azmag.gov/arcgis/rest/services/maps/Heat_Relief_Network/MapServer/2',
+    id: "donation",
+    url: "https://geo.azmag.gov/arcgis/rest/services/maps/Heat_Relief_Network/MapServer/2",
     includeInLayersList: true,
     visible: true,
-    title: 'Donation Site',
+    title: "Donation Site",
     legend: true,
     popupTemplate: heatReliefPopup(),
   },
   {
-    id: 'hydration',
-    url: 'https://geo.azmag.gov/arcgis/rest/services/maps/Heat_Relief_Network/MapServer/1',
+    id: "hydration",
+    url: "https://geo.azmag.gov/arcgis/rest/services/maps/Heat_Relief_Network/MapServer/1",
     includeInLayersList: true,
     visible: true,
-    title: 'Hydration Station',
+    title: "Hydration Station",
     legend: true,
     popupTemplate: heatReliefPopup(),
   },
   {
-    id: 'cooling',
-    url: 'https://geo.azmag.gov/arcgis/rest/services/maps/Heat_Relief_Network/MapServer/0',
+    id: "cooling",
+    url: "https://geo.azmag.gov/arcgis/rest/services/maps/Heat_Relief_Network/MapServer/0",
     includeInLayersList: true,
     visible: true,
-    title: 'Cooling Center',
+    title: "Cooling Center",
     legend: true,
     popupTemplate: heatReliefPopup(),
   },

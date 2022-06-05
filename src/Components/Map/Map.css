@@ -42,3 +42,15 @@
   text-decoration: underline;
   color: blue;
 }
+
+.esri-legend{
+  width: 70px !important;
+}
+
+.esri-legend__layer{
+  margin: 0 !important;
+}
+
+.esri-legend__message {
+  display: none;
+}
