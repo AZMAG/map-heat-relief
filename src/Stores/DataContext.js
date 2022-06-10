@@ -8,6 +8,7 @@ import { configure } from 'mobx';
 import getData from './getData';
 import isOpenNow from './isOpenNow';
 import getDistanceFromLatLonInMiles from './getDistanceFromLatLonInMiles';
+import getExcessiveHeatData from './getExcessiveHeatData';
 
 configure({
   enforceActions: 'never',
@@ -29,6 +30,7 @@ export const DataProvider = ({ children }) => {
 
   (async () => {
     store.points = await getData();
+    store.excessiveHeatData = await getExcessiveHeatData();
     store.dataLoading = false;
   })();
 

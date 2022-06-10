@@ -1,11 +1,13 @@
-import { useRef, useEffect } from "react";
-import Legend from "@arcgis/core/widgets/Legend";
-import { Form } from "react-bootstrap";
+import { useRef, useEffect } from 'react';
+import Legend from '@arcgis/core/widgets/Legend';
+import { Form } from 'react-bootstrap';
 
-import layers from "./layersConfig";
+import layers from './layersConfig';
 
 export default function CustomLegend({ map, view, store }) {
   const refs = [useRef(), useRef(), useRef()];
+
+  const legendLayers = [...layers].reverse();
 
   function checkChanged(e) {
     store.openNowChecked = e.target.checked;
@@ -18,12 +20,12 @@ export default function CustomLegend({ map, view, store }) {
 
   useEffect(() => {
     if (map) {
-      layers.forEach((lay, i) => {
+      legendLayers.forEach((lay, i) => {
         const layer = map.findLayerById(lay.id);
         new Legend({
           container: refs[i].current,
           view,
-          layerInfos: [{ title: "", layer }],
+          layerInfos: [{ title: '', layer }],
         });
       });
     }
@@ -31,14 +33,14 @@ export default function CustomLegend({ map, view, store }) {
 
   return (
     <div className="legend-container">
-      {layers.map((l, i) => (
-        <div key={i} style={{ display: "flex", alignItems: "center" }}>
+      {legendLayers.map((l, i) => (
+        <div key={i} style={{ display: 'flex', alignItems: 'center' }}>
           <div style={{ flex: 1 }} ref={refs[i]}></div>
           <Form.Check
             style={{ flex: 3 }}
             onChange={(e) => layerCheckChanged(e, l)}
             defaultChecked
-            type={"switch"}
+            type={'switch'}
             id={l.id}
             label={l.title}
           />
@@ -48,7 +50,7 @@ export default function CustomLegend({ map, view, store }) {
       <Form.Check
         onChange={checkChanged}
         value={store.openNowChecked}
-        type={"switch"}
+        type={'switch'}
         id={`default`}
         label={`Open Now`}
       />

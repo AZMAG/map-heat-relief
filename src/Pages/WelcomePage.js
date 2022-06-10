@@ -5,12 +5,17 @@ import { Jumbotron, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import DisclaimerModal from '../Modals/DisclaimerModal';
 import AboutModal from '../Modals/AboutModal';
+import Alert from 'react-bootstrap/Alert';
 
 import ReactGA from 'react-ga';
 
 import HeatReliefBanner from '../images/HRN-Banner.jpg';
+import { observer } from 'mobx-react-lite';
+import { useDataStore } from '../Stores/DataContext';
 
-export default function Welcome() {
+function Welcome() {
+  const store = useDataStore();
+
   ReactGA.initialize('UA-29422512-1');
   ReactGA.pageview(window.location.pathname + window.location.search);
   const navigate = useNavigate();
@@ -32,6 +37,7 @@ export default function Welcome() {
         aboutModalShown={aboutModalShown}
         setAboutModalShown={setAboutModalShown}
       />
+
       <div className="welcome-page-header">
         <img
           className="hrn-logo"
@@ -47,6 +53,28 @@ export default function Welcome() {
         alt="Person drinking from water bottle"
       />
 
+      <Alert
+        style={{
+          width: '50%',
+          margin: 'auto',
+          marginTop: '15px',
+          display: store.excessiveHeatData.length > 0 ? 'block' : 'none',
+        }}
+        variant="danger"
+      >
+        Excessive Heat Warning / Watch in effect.
+        <Button
+          onClick={() => {
+            store.excessiveHeatModalShown = true;
+          }}
+          variant="outline-danger"
+          size="sm"
+          style={{ marginLeft: '10px', marginRight: '10px' }}
+        >
+          Click here
+        </Button>
+        for more info.
+      </Alert>
       <div className="box-container">
         <Search />
         <div className="or">Or</div>
@@ -79,3 +107,5 @@ export default function Welcome() {
     </div>
   );
 }
+
+export default observer(Welcome);

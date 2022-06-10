@@ -1,38 +1,37 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import xml2js from "xml2js";
+import React from 'react';
+import { useDataStore } from '../../Stores/DataContext';
+import { observer } from 'mobx-react-lite';
 
-const metaDataUrl =
-  "https://geo.azmag.gov/arcgis/rest/services/maps/Heat_Relief_Network/MapServer/info/metadata";
+function LastUpdated() {
+  const store = useDataStore();
 
-export default function LastUpdated() {
-  const [date, setDate] = useState(null);
+  let maxUpdatedDate = new Date('01/01/2000');
+  store.points.forEach((point) => {
+    if (point.Date_Updated) {
+      const testDate = new Date(point.Date_Updated);
+      if (testDate > maxUpdatedDate) {
+        maxUpdatedDate = testDate;
+      }
+    }
+  });
 
-  useEffect(() => {
-    axios.get(metaDataUrl).then((response) => {
-      xml2js.parseString(response.data, (err, result) => {
-        if (err) {
-          //Do something
-        } else {
-          const rawDateString = result.metadata.Esri[0].CreaDate[0];
-          const year = rawDateString.slice(0, 4);
-          const day = rawDateString.slice(4, 6);
-          const month = rawDateString.slice(6, 8);
-          setDate(`${day}/${month}/${year}`);
-        }
-      });
-    });
-    //
-  }, []);
+  const yyyy = maxUpdatedDate.getFullYear();
+  const mm = String(maxUpdatedDate.getMonth() + 1).padStart(2, '0');
+  const dd = String(maxUpdatedDate.getDate() + 1).padStart(2, '0');
 
   return (
     <>
-      {date && (
+      {maxUpdatedDate && (
         <span className="ml-2">
-          {" "}
-          - Last Updated: <b>{date}</b>
+          {' '}
+          - Last Updated:{' '}
+          <b>
+            {mm}/{dd}/{yyyy}
+          </b>
         </span>
       )}
     </>
   );
 }
+
+export default observer(LastUpdated);

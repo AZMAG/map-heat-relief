@@ -13,5 +13,7 @@ export function createDataStore() {
     donationLayerView: null,
     openNowCount: 0,
     points: [],
+    excessiveHeatModalShown: false,
+    excessiveHeatData: [],
   });
 }

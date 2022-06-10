@@ -6,6 +6,7 @@ import WelcomePage from './Pages/WelcomePage';
 import MapPage from './Pages/MapPage';
 import ListingPage from './Pages/ListingPage';
 import { DataProvider } from './Stores/DataContext';
+import ExcessiveHeatModal from './Modals/ExcessiveHeatModal';
 
 function App() {
   const TRACKING_ID = 'UA-29422512-1';
@@ -23,6 +24,7 @@ function App() {
             <Route path="/listing" element={<ListingPage />} />
             <Route path="/" element={<WelcomePage />} />
           </Routes>
+          <ExcessiveHeatModal />
         </DataProvider>
       </Router>
     </div>
