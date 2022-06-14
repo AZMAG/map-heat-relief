@@ -1,15 +1,16 @@
-@import "https://js.arcgis.com/4.20/@arcgis/core/assets/esri/themes/light/main.css";
-@import "https://use.fontawesome.com/releases/v5.12.0/css/all.css";
-@import "../node_modules//normalize.css/normalize.css";
+@import 'https://js.arcgis.com/4.20/@arcgis/core/assets/esri/themes/light/main.css';
+@import 'https://use.fontawesome.com/releases/v5.12.0/css/all.css';
+@import '../node_modules//normalize.css/normalize.css';
 
 body {
   background-color: #282c34;
-  font-family: "Open Sans", sans-serif;
+  font-family: 'Open Sans', sans-serif;
   font-size: 16px !important;
 }
 .app {
   background-color: #282c34;
   height: calc(100vh - 50px);
+  overflow: hidden !important;
 }
 
 h3 {
@@ -18,22 +19,36 @@ h3 {
 
 .main-header {
   color: white;
-  max-height: 30px;
+  max-height: 50px;
   text-align: center;
   align-items: center;
   display: flex;
   justify-content: space-between;
   gap: 10px;
-  margin: 10px;
 
   h3 {
     margin: 0;
-    font-size: 1.15rem;
+    font-size: 1rem;
     @media screen and (min-width: 900px) {
       // flex: 1;
-      font-size: 1.5rem;
+      font-size: 1.2rem;
     }
   }
+
+  .header-heat-alert {
+    @media screen and (max-width: 900px) {
+      display: none !important;
+    }
+  }
+  .last-updated {
+    font-size: 0.7rem;
+  }
+
+  // .mobile-heat-btn {
+  //   @media screen and (min-width: 900px) {
+  //     display: none !important;
+  //   }
+  // }
 }
 
 .home-btn {
@@ -59,8 +74,11 @@ h3 {
 
 .map-page {
   height: 100%;
+  display: flex;
+  flex-direction: column;
   .map-container {
-    height: 100%;
+    flex: 1;
+    overflow: hidden;
   }
   .list-view-btn {
     width: 130px;
@@ -99,6 +117,11 @@ h3 {
     margin-right: 4%;
     .jumbotron {
       margin-top: 15px;
+      @media screen and (max-width: 900px) {
+        padding: 20px;
+        margin-bottom: 10px;
+        margin-top: 10px;
+      }
     }
     @media screen and (min-width: 900px) {
       display: flex;
@@ -117,10 +140,12 @@ h3 {
     display: flex;
     align-items: center;
     padding: 15px 15px 10px 15px;
-    font-size: 18px;
     margin: auto;
 
     h3 {
+      @media screen and (max-width: 900px) {
+        font-size: 1.2rem;
+      }
       color: white;
       flex: 1;
       text-align: center;
@@ -162,4 +187,22 @@ h3 {
 
 .esri-expand__content {
   box-shadow: none;
+}
+
+.welcome-page-alert {
+  @media screen and (max-width: 900px) {
+    width: 90% !important;
+  }
+}
+
+.modal-title {
+  @media screen and (max-width: 900px) {
+    font-size: 1rem;
+  }
+}
+
+.list-group {
+  // background-color: purple;
+  max-height: calc(100vh - 142px);
+  overflow-y: auto;
 }

@@ -8,7 +8,7 @@ import ReactGA from 'react-ga';
 
 export default function CustomMap() {
   ReactGA.initialize('UA-29422512-1');
-  ReactGA.pageview(window.location.pathname + window.location.search);
+  ReactGA.pageview(window.location.origin + window.location.pathname);
   const rawSearch = useLocation().search;
   const searchParams = new URLSearchParams(rawSearch);
   const navigate = useNavigate();

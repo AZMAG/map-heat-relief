@@ -22,9 +22,9 @@ function LastUpdated() {
   return (
     <>
       {maxUpdatedDate && (
-        <span className="ml-2">
+        <span className="ml-2 last-updated">
           {' '}
-          - Last Updated:{' '}
+          Last Updated:{' '}
           <b>
             {mm}/{dd}/{yyyy}
           </b>

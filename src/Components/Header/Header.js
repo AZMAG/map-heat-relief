@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 import AboutModal from '../../Modals/AboutModal';
 import LastUpdated from './LastUpdated';
-import Alert from 'react-bootstrap/Alert';
+// import Alert from 'react-bootstrap/Alert';
 import { useDataStore } from '../../Stores/DataContext';
 import { observer } from 'mobx-react-lite';
 
@@ -30,10 +30,10 @@ function Header() {
       </Button>
       <div
         style={{
-          flex: 1,
-          display: 'inline-flex',
+          flex: 3,
+          // display: 'inline-flex',
           // justifyContent: 'center',
-          alignItems: 'center',
+          alignItems: 'right',
           marginRight: '20px',
           justifyContent:
             store.excessiveHeatData.length > 0 ? 'right' : 'center',
@@ -42,7 +42,8 @@ function Header() {
         <h3>{new Date().getFullYear()} Heat Relief Network</h3>
         <LastUpdated />
       </div>
-      <Alert
+      {/* <Alert
+        className="header-heat-alert"
         style={{
           padding: '2px 5px',
           margin: 0,
@@ -62,7 +63,17 @@ function Header() {
           Click here
         </Button>
         for more info.
-      </Alert>
+      </Alert> */}
+      <Button
+        variant="danger"
+        size="sm"
+        className="mobile-heat-btn"
+        onClick={() => {
+          store.excessiveHeatModalShown = true;
+        }}
+      >
+        <i className="fas fa-exclamation-circle"></i>
+      </Button>
       <Button variant="secondary" size="sm" onClick={infoClicked}>
         <i className="fa fa-info-circle"></i>
       </Button>

@@ -7,7 +7,6 @@ import { autorun } from 'mobx';
 import { configure } from 'mobx';
 import getData from './getData';
 import isOpenNow from './isOpenNow';
-import getDistanceFromLatLonInMiles from './getDistanceFromLatLonInMiles';
 import getExcessiveHeatData from './getExcessiveHeatData';
 
 configure({
@@ -33,23 +32,6 @@ export const DataProvider = ({ children }) => {
     store.excessiveHeatData = await getExcessiveHeatData();
     store.dataLoading = false;
   })();
-
-  autorun(() => {
-    if (!store.dataLoading) {
-      if (store.points && store.points.length > 0 && store.lat && store.lng) {
-        store.points = store.points.map((point) => {
-          const distance = getDistanceFromLatLonInMiles(
-            store.lat,
-            store.lng,
-            point.latitude,
-            point.longitude
-          );
-          point.distance = distance;
-          return point;
-        });
-      }
-    }
-  });
 
   autorun(() => {
     if (!store.dataLoading && store.mapLoaded) {

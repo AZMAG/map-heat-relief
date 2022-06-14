@@ -17,7 +17,7 @@ function Welcome() {
   const store = useDataStore();
 
   ReactGA.initialize('UA-29422512-1');
-  ReactGA.pageview(window.location.pathname + window.location.search);
+  ReactGA.pageview(window.location.origin + window.location.pathname);
   const navigate = useNavigate();
   const [aboutModalShown, setAboutModalShown] = useState(false);
 
@@ -54,6 +54,7 @@ function Welcome() {
       />
 
       <Alert
+        className="welcome-page-alert"
         style={{
           width: '50%',
           margin: 'auto',

@@ -9,12 +9,16 @@ import FilterButtons from '../Components/Listing/FilterButtons';
 import ReactGA from 'react-ga';
 import { useDataStore } from '../Stores/DataContext';
 import { useNavigate } from 'react-router-dom';
+import getDistanceFromLatLonInMiles from '../Stores/getDistanceFromLatLonInMiles';
+import { Form } from 'react-bootstrap';
+
+import isOpenNow from './../Stores/isOpenNow';
 
 function ListingPage() {
   const store = useDataStore();
 
   ReactGA.initialize('UA-29422512-1');
-  ReactGA.pageview(window.location.pathname + window.location.search);
+  ReactGA.pageview(window.location.origin + window.location.pathname);
   const navigate = useNavigate();
   const [items, setItems] = useState([]);
   const [filteredItems, setFilteredItems] = useState([]);
@@ -26,29 +30,51 @@ function ListingPage() {
 
   useEffect(() => {
     if (!store.dataLoading) {
-      (async () => {
-        let data = store.points;
-        data = data.filter(({ distance }) => distance <= 5);
-        data.sort((a, b) => a.distance - b.distance);
-
-        setItems(data);
-        setFilteredItems(data);
-
-        document.querySelectorAll('*').forEach(function (elem) {
-          elem.onscroll = function (e) {
-            setTimeout(() => {
-              setScrolled(true);
-              elem.onscroll = null;
-            }, 100);
-          };
+      let data = [...store.points];
+      if (store.lat && store.lng) {
+        data = data.map((point) => {
+          const distance = getDistanceFromLatLonInMiles(
+            store.lat,
+            store.lng,
+            point.latitude,
+            point.longitude
+          );
+          point.distance = distance;
+          return point;
         });
-      })();
+
+        data = data.filter(({ distance }) => {
+          return distance <= 5;
+        });
+        data.sort((a, b) => {
+          return a.distance - b.distance;
+        });
+      }
+
+      setItems(data);
+      setFilteredItems(data);
+
+      document.querySelectorAll('*').forEach(function (elem) {
+        elem.onscroll = function (e) {
+          setTimeout(() => {
+            setScrolled(true);
+            elem.onscroll = null;
+          }, 100);
+        };
+      });
     }
   }, [store.dataLoading, store]);
 
   useEffect(() => {
     if (items) {
       const tempFilteredItems = items.filter((item) => {
+        if (store.openNowChecked) {
+          const open = isOpenNow(item);
+          if (!open) {
+            return false;
+          }
+        }
+
         if (cooling && item.HydrationActivities === 'Cooling_Center') {
           return true;
         }
@@ -62,7 +88,7 @@ function ListingPage() {
       });
       setFilteredItems(tempFilteredItems);
     }
-  }, [cooling, hydration, donation, items]);
+  }, [cooling, hydration, donation, items, store.openNowChecked]);
 
   const headerLabelStyle = {
     fontSize: '16px',
@@ -70,6 +96,10 @@ function ListingPage() {
     padding: '8px',
     textAlign: 'center',
   };
+
+  function checkChanged() {
+    store.openNowChecked = !store.openNowChecked;
+  }
 
   return (
     <div className="listing-page">
@@ -83,6 +113,7 @@ function ListingPage() {
           hydration={hydration}
           donation={donation}
         />
+
         {store.dataLoading ? (
           <div style={{ marginTop: '40px' }}>
             <Spinner style={{ margin: 'auto' }} animation="border" />
@@ -107,6 +138,14 @@ function ListingPage() {
             ) : (
               ''
             )}
+            <Form.Check
+              style={{ marginTop: '5px' }}
+              onChange={checkChanged}
+              value={store.openNowChecked}
+              type={'switch'}
+              id={`default`}
+              label={`Open Now`}
+            />
             <div
               style={{ display: 'flex', alignItems: 'center', margin: '8px' }}
             >
